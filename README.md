@@ -121,3 +121,25 @@ These settings are the weights of the score function, translated into plain lang
 
 Phases 0 and 1 are the only ones strictly needed to find out whether the idea holds up.
 
+## 7. Technical Notes
+
+**On tracker integration:** a direct Yazio integration is unrealistic — there is no public API, and it would require a partnership. The practical route is the platform's own health store: **Apple Health (HealthKit)**, and **Health Connect** on Android. Trackers write their nutrition data there; WhatToEat reads today's consumed kcal and macros and derives the remainder itself. This works without any cooperation from Yazio, and with every other tracker at the same time.
+*To verify:* whether Yazio actually writes nutrition data to Apple Health in the version in use, and at what granularity.
+
+**Proposed stack:** the solver as a standalone, tested module. Above it a cross-platform UI (Flutter or React Native), so that phase 5 does not mean building everything twice, with native bridges for HealthKit and Health Connect. A backend is only needed from phase 2/3 onwards; for a solo developer a backend-as-a-service beats self-hosted infrastructure, and relational Postgres fits product data well. Pantry and solver stay **offline-first**.
+
+## 8. Scope
+
+WhatToEat is **not** a calorie tracker and does not aim to become one. It is a companion for the last decision of the day. That keeps the product small and sharp — but it also means a permanent dependency on the app the user already runs. That is the central strategic risk, and it should be carried deliberately rather than defined away.
+
+## 9. Open Questions
+
+- Open Food Facts licensing (ODbL) under commercial use.
+- Does Yazio reliably write to Apple Health? What about the other major trackers?
+- How does the pantry get into the app without typing? (Barcode scan as the default path.)
+- The name "WhatToEat?" — App Store availability and trademark situation.
+- Community features need moderation. At what point is that worth the effort?
+
+---
+
+*Idea dump of 2026-08-29, structured. Changes and additions belong directly in this file.*
