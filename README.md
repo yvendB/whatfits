@@ -101,3 +101,23 @@ From the usage data of recent weeks the app learns which products fit which budg
 
 These settings are the weights of the score function, translated into plain language.
 
+## 5. Business Model
+
+- The app is **free** by default, funded by ads.
+- A **Pro subscription** removes the ads. Price range in line with Yazio — deliberately cheap; this is not a premium product.
+
+## 6. Platforms & Roadmap
+
+**iOS first, Android after. One thing at a time.**
+
+| Phase | Content | Goal |
+|---|---|---|
+| **0** | Solver as a prototype (plain script, real pantry data) | Prove the suggestions genuinely beat doing it by hand |
+| **1** | iOS app, local only, manual entry, own pantry, solver | Usable daily by myself |
+| **2** | Product database + barcode scan, Health integration | Usable by strangers |
+| **3** | Accounts, community dishes, points | Network effect |
+| **4** | Ads + Pro subscription | Monetisation |
+| **5** | Android | Reach |
+
+Phases 0 and 1 are the only ones strictly needed to find out whether the idea holds up.
+
