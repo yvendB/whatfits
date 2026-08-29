@@ -65,3 +65,17 @@ In practice: pre-filter by meal and category, then depth-first search with branc
 
 > **Architecture note:** the solver belongs in a standalone, platform-independent module covered by unit tests, independent of the UI framework. It is the app's one genuine differentiator, and the part that is easiest to test — and to show in a portfolio.
 
+### 3.4 Product Database & Data Quality
+
+Users may add their own products — as in Yazio — because otherwise the one store brand you actually buy is always missing. Two stages keep the database from rotting:
+
+**Automatic plausibility check on entry:**
+
+- Calculated calories: `kcal ≈ 4·carbs + 4·protein + 9·fat`. If the entered kcal value deviates by more than roughly 20 %, warn.
+- Hard bounds: macros sum to ≤ 100 g per 100 g; no single value above that; ≤ ~900 kcal per 100 g, which would be pure fat.
+- Order-of-magnitude check against the category: 500 g of rice is ~600 kcal, not 6,000 — this catches decimal-place typos reliably.
+
+**Community review** for entries that look suspicious or are used frequently.
+
+> **Cold-start problem:** an empty product database makes the app unusable. The obvious base layer is [Open Food Facts](https://world.openfoodfacts.org) — open, barcode-indexed, millions of products. **To check:** its licence (ODbL) requires attribution and imposes conditions on derived databases. That has to be settled *before* commercial use, not after.
+
