@@ -140,6 +140,14 @@ WhatFits is **not** a calorie tracker and does not aim to become one. It is a co
 - Trademark clearance for "WhatFits" (DPMA, EUIPO, USPTO) — the obvious collisions are ruled out, but a web search is not a legal clearance.
 - Community features need moderation. At what point is that worth the effort?
 
+## 10. Licence
+
+Copyright (c) 2026 Yven de Buhr. All rights reserved. See [LICENSE](LICENSE).
+
+This repository is public so the work can be read and evaluated. It is not
+open source: no permission is granted to reuse the code or the concept
+material in another project.
+
 ---
 
 *Idea dump of 2026-08-29, structured. Changes and additions belong directly in this file.*
