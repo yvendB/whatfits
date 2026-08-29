@@ -1,0 +1,52 @@
+# --- Operating system ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editors / IDEs ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*~
+
+# --- Node / JavaScript ---
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+dist/
+build/
+.env
+.env.local
+
+# --- Python (solver prototype) ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Dart / Flutter ---
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+
+# --- iOS / Xcode ---
+*.xcuserstate
+xcuserdata/
+DerivedData/
+Pods/
+
+# --- Android ---
+*.apk
+*.aab
+local.properties
+.gradle/
+
+# --- Misc ---
+*.log
+.cache/

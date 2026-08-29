@@ -1,0 +1,11 @@
+# Always store line endings as LF in the repository and check them out
+# in the platform's native form. Prevents diff noise between Windows
+# development and CI / macOS build machines.
+* text=auto eol=lf
+
+# Leave binaries alone.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.ico binary
