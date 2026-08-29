@@ -43,3 +43,25 @@ Per entry:
 
 The **portion grid** is the one idea that separates this app from a plain calculator.
 
+### 3.3 The Suggestion Algorithm (the core)
+
+**Input:** remaining budget (kcal + macros with tolerances), the pantry with its portion grids, the meal type, user preferences.
+**Output:** several combinations, ranked by how well they fit.
+
+The search space is deliberately **discrete**: every product may only contribute amounts from its own grid (corn: 0 / ½ / 1 / 1½ tins — rice: 0 / 50 / 60 / … / 150 g). That makes the result practical by construction, instead of rounding it into shape afterwards.
+
+Each combination is ranked by a weighted score, roughly:
+
+```
+score =  w_kcal  · deviation(kcal)          // asymmetric: over ≠ under
+       + w_macro · deviation(P, C, F)
+       + w_pack  · partial_pack_penalty     // odd leftovers are expensive, whole packs are free
+       - w_open  · use_up_bonus             // clearing an already-open pack pays off
+       + w_rep   · repetition_penalty       // not the same thing five days running
+       + w_n     · component_count          // three ingredients beat six
+```
+
+In practice: pre-filter by meal and category, then depth-first search with branch and bound over at most three to five components. With a pantry of 20–40 products this resolves in milliseconds on the device — **no server required**, the core feature works offline.
+
+> **Architecture note:** the solver belongs in a standalone, platform-independent module covered by unit tests, independent of the UI framework. It is the app's one genuine differentiator, and the part that is easiest to test — and to show in a portfolio.
+
