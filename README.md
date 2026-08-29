@@ -79,3 +79,25 @@ Users may add their own products — as in Yazio — because otherwise the one s
 
 > **Cold-start problem:** an empty product database makes the app unusable. The obvious base layer is [Open Food Facts](https://world.openfoodfacts.org) — open, barcode-indexed, millions of products. **To check:** its licence (ODbL) requires attribution and imposes conditions on derived databases. That has to be settled *before* commercial use, not after.
 
+### 3.5 Meal Context
+
+Split into **breakfast / lunch / dinner / snack**. This matters to the solver because different food makes sense per meal — suggestion sets for different meals should overlap as little as possible.
+
+### 3.6 Suggestions From History
+
+From the usage data of recent weeks the app learns which products fit which budget situations — and reminds the user of food they keep forgetting despite having it in the cupboard. That is exactly the mistake people make when doing this in their head.
+
+### 3.7 Community
+
+- Users can publish their own **dishes** (finished combinations), which can then be offered to others as ready-made suggestions.
+- **Community points** on the profile as an incentive to contribute data.
+
+## 4. User-Facing Settings
+
+- **Target accuracy:** how precisely does the budget have to be hit?
+- **May I go over?** Overshoot allowed yes/no, and if yes, by how much.
+- **Partial-pack rules** per product or category: tins only whole or half, nuts to the gram.
+- **Maximum number of components** per suggestion.
+
+These settings are the weights of the score function, translated into plain language.
+
