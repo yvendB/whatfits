@@ -1,8 +1,8 @@
-# WhatToEat?
+# WhatFits?
 
 **The leftover-budget planner for the last meal of the day.**
 
-It's 9 pm and you have 950 kcal left. What do you eat — from what is actually in your cupboard, without spending five minutes nudging gram counts around in a tracker?
+It's 9 pm and you have 950 kcal left. What fits — from what is actually in your cupboard, without spending five minutes nudging gram counts around in a tracker?
 
 ---
 
@@ -123,21 +123,21 @@ Phases 0 and 1 are the only ones strictly needed to find out whether the idea ho
 
 ## 7. Technical Notes
 
-**On tracker integration:** a direct Yazio integration is unrealistic — there is no public API, and it would require a partnership. The practical route is the platform's own health store: **Apple Health (HealthKit)**, and **Health Connect** on Android. Trackers write their nutrition data there; WhatToEat reads today's consumed kcal and macros and derives the remainder itself. This works without any cooperation from Yazio, and with every other tracker at the same time.
+**On tracker integration:** a direct Yazio integration is unrealistic — there is no public API, and it would require a partnership. The practical route is the platform's own health store: **Apple Health (HealthKit)**, and **Health Connect** on Android. Trackers write their nutrition data there; WhatFits reads today's consumed kcal and macros and derives the remainder itself. This works without any cooperation from Yazio, and with every other tracker at the same time.
 *To verify:* whether Yazio actually writes nutrition data to Apple Health in the version in use, and at what granularity.
 
 **Proposed stack:** the solver as a standalone, tested module. Above it a cross-platform UI (Flutter or React Native), so that phase 5 does not mean building everything twice, with native bridges for HealthKit and Health Connect. A backend is only needed from phase 2/3 onwards; for a solo developer a backend-as-a-service beats self-hosted infrastructure, and relational Postgres fits product data well. Pantry and solver stay **offline-first**.
 
 ## 8. Scope
 
-WhatToEat is **not** a calorie tracker and does not aim to become one. It is a companion for the last decision of the day. That keeps the product small and sharp — but it also means a permanent dependency on the app the user already runs. That is the central strategic risk, and it should be carried deliberately rather than defined away.
+WhatFits is **not** a calorie tracker and does not aim to become one. It is a companion for the last decision of the day. That keeps the product small and sharp — but it also means a permanent dependency on the app the user already runs. That is the central strategic risk, and it should be carried deliberately rather than defined away.
 
 ## 9. Open Questions
 
 - Open Food Facts licensing (ODbL) under commercial use.
 - Does Yazio reliably write to Apple Health? What about the other major trackers?
 - How does the pantry get into the app without typing? (Barcode scan as the default path.)
-- The name "WhatToEat?" — App Store availability and trademark situation.
+- Trademark clearance for "WhatFits" (DPMA, EUIPO, USPTO) — the obvious collisions are ruled out, but a web search is not a legal clearance.
 - Community features need moderation. At what point is that worth the effort?
 
 ---
