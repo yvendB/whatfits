@@ -1,4 +1,4 @@
-<title>WhatToEat?</title>
+<title>WhatFits?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <style>
   :root {
@@ -503,8 +503,8 @@
 
   <header class="masthead">
     <p class="eyebrow">Product concept &middot; Draft 2026-08-29</p>
-    <h1>WhatToEat<span class="q">?</span></h1>
-    <p class="lede">Calorie trackers tell you <strong>how much</strong> you may still eat tonight. None of them tell you <strong>what</strong> &mdash; from the food actually in your cupboard, in amounts you can measure without a jeweller's scale.</p>
+    <h1>WhatFits<span class="q">?</span></h1>
+    <p class="lede">Calorie trackers tell you <strong>how much</strong> you may still eat tonight. None of them tell you <strong>what fits</strong> &mdash; from the food actually in your cupboard, in amounts you can measure without a jeweller's scale.</p>
 
     <div class="panel">
       <div class="panel-head"><span>Left for today</span><span>21:40</span></div>
@@ -555,7 +555,7 @@
         </div>
 
         <div class="card good">
-          <span class="card-label">WhatToEat</span>
+          <span class="card-label">WhatFits</span>
           <div class="items">
             <div class="item"><span>Sweetcorn, tinned</span><span class="amt">1 tin</span></div>
             <div class="item"><span>Rice, dry</span><span class="amt">100 g</span></div>
@@ -695,14 +695,14 @@ score = w_kcal  Â· deviation(kcal)        <span class="c">// asymmetric: over â‰
       <div class="sec-head"><span class="sec-num">09</span><h2>Tech &amp; risk</h2></div>
 
       <h3>Tracker integration</h3>
-      <p>A direct Yazio integration is unrealistic: there is no public API, and it would require a partnership. The practical route is the platform's own health store &mdash; <strong>Apple Health</strong>, and <strong>Health Connect</strong> on Android. Trackers write their nutrition data there; WhatToEat reads today's consumed calories and macros and derives the remainder itself. This works without any cooperation from Yazio &mdash; and with every other tracker at the same time.</p>
+      <p>A direct Yazio integration is unrealistic: there is no public API, and it would require a partnership. The practical route is the platform's own health store &mdash; <strong>Apple Health</strong>, and <strong>Health Connect</strong> on Android. Trackers write their nutrition data there; WhatFits reads today's consumed calories and macros and derives the remainder itself. This works without any cooperation from Yazio &mdash; and with every other tracker at the same time.</p>
       <p><em>To verify:</em> whether Yazio actually writes nutrition data to Apple Health in the version in use, and at what granularity.</p>
 
       <h3>Stack</h3>
       <p>The solver as a standalone, tested module. Above it a cross-platform UI &mdash; Flutter or React Native &mdash; so that phase&nbsp;5 does not mean building everything twice, with native bridges for HealthKit and Health Connect. A backend is only needed from phase&nbsp;2/3 onwards; for a solo developer, a backend-as-a-service beats self-hosted infrastructure, and relational Postgres fits product data well. Pantry and solver stay offline-first.</p>
 
       <h3>Scope &mdash; and the one real risk</h3>
-      <p>WhatToEat is <strong>not</strong> a calorie tracker and does not aim to become one. It is a companion for the last decision of the day. That keeps the product small and sharp, but it also means a permanent dependency on the app the user already runs. That is the central strategic risk &mdash; it should be carried deliberately, not defined away.</p>
+      <p>WhatFits is <strong>not</strong> a calorie tracker and does not aim to become one. It is a companion for the last decision of the day. That keeps the product small and sharp, but it also means a permanent dependency on the app the user already runs. That is the central strategic risk &mdash; it should be carried deliberately, not defined away.</p>
     </section>
 
     <section id="open">
@@ -711,7 +711,7 @@ score = w_kcal  Â· deviation(kcal)        <span class="c">// asymmetric: over â‰
         <div class="question"><span class="q-mark">01</span><p>Open Food Facts licensing (ODbL) under commercial use.</p></div>
         <div class="question"><span class="q-mark">02</span><p>Does Yazio reliably write to Apple Health? And what about the other major trackers?</p></div>
         <div class="question"><span class="q-mark">03</span><p>How does the pantry get into the app without typing? Barcode scan as the default path.</p></div>
-        <div class="question"><span class="q-mark">04</span><p>The name &ldquo;WhatToEat?&rdquo; &mdash; App Store availability and trademark situation.</p></div>
+        <div class="question"><span class="q-mark">04</span><p>Trademark clearance for &ldquo;WhatFits&rdquo; (DPMA, EUIPO, USPTO) &mdash; the obvious collisions are ruled out, but a web search is not a legal clearance.</p></div>
         <div class="question"><span class="q-mark">05</span><p>Community features need moderation. At what point is that worth the effort?</p></div>
       </div>
     </section>
@@ -719,7 +719,7 @@ score = w_kcal  Â· deviation(kcal)        <span class="c">// asymmetric: over â‰
   </main>
 
   <footer>
-    <span>WhatToEat? &middot; Product concept</span>
+    <span>WhatFits? &middot; Product concept</span>
     <span>Idea dump of 2026-08-29, structured</span>
   </footer>
 
