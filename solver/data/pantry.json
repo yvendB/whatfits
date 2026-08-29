@@ -1,0 +1,89 @@
+{
+  "_comment": [
+    "The pantry the solver plans from. This is seed data, not truth:",
+    "replace the nutrition values, pack sizes and portion grids with what is",
+    "actually in your cupboard. Phase 0 only answers its question honestly if",
+    "the data is honest. Check values against the packet, not against memory.",
+    "",
+    "grid.kind 'pack'  -> amounts are multiples of `fraction` of a pack.",
+    "                     fraction 1.0 means whole packs only.",
+    "grid.kind 'mass'  -> amounts in gram steps, for food where a part",
+    "                     portion is normal anyway.",
+    "open_g            -> how much of an already opened pack is in the fridge."
+  ],
+  "products": [
+    {
+      "id": "chicken-breast",
+      "name": "Chicken breast, raw",
+      "category": "protein",
+      "per_100g": { "kcal": 106, "carbs_g": 0.0, "protein_g": 23.0, "fat_g": 1.8 },
+      "grid": { "kind": "pack", "pack_g": 150, "unit": "breast", "fraction": 1.0, "max_packs": 2 },
+      "meals": ["lunch", "dinner"]
+    },
+    {
+      "id": "rice-dry",
+      "name": "Rice, dry",
+      "category": "carbs",
+      "per_100g": { "kcal": 349, "carbs_g": 78.0, "protein_g": 7.0, "fat_g": 0.6 },
+      "grid": { "kind": "mass", "step_g": 10, "min_g": 40, "max_g": 150 },
+      "meals": ["lunch", "dinner"]
+    },
+    {
+      "id": "sweetcorn-tinned",
+      "name": "Sweetcorn, tinned, drained",
+      "category": "vegetables",
+      "per_100g": { "kcal": 80, "carbs_g": 15.0, "protein_g": 2.8, "fat_g": 1.2 },
+      "grid": { "kind": "pack", "pack_g": 150, "unit": "tin", "fraction": 0.5, "max_packs": 2 },
+      "meals": ["lunch", "dinner"]
+    },
+    {
+      "id": "kidney-beans",
+      "name": "Kidney beans, tinned, drained",
+      "category": "legumes",
+      "per_100g": { "kcal": 88, "carbs_g": 13.0, "protein_g": 7.0, "fat_g": 0.5 },
+      "grid": { "kind": "pack", "pack_g": 255, "unit": "tin", "fraction": 0.5, "max_packs": 1 },
+      "meals": ["lunch", "dinner"],
+      "open_g": 127.5
+    },
+    {
+      "id": "peas-carrots",
+      "name": "Peas & carrots, tinned",
+      "category": "vegetables",
+      "per_100g": { "kcal": 50, "carbs_g": 8.0, "protein_g": 2.5, "fat_g": 0.4 },
+      "grid": { "kind": "pack", "pack_g": 265, "unit": "tin", "fraction": 0.5, "max_packs": 1 },
+      "meals": ["lunch", "dinner"]
+    },
+    {
+      "id": "peanuts-roasted",
+      "name": "Peanuts, roasted",
+      "category": "nuts",
+      "per_100g": { "kcal": 587, "carbs_g": 16.0, "protein_g": 26.0, "fat_g": 49.0 },
+      "grid": { "kind": "mass", "step_g": 5, "min_g": 10, "max_g": 60 },
+      "meals": ["dinner", "snack"]
+    },
+    {
+      "id": "eggs",
+      "name": "Egg, medium",
+      "category": "protein",
+      "per_100g": { "kcal": 143, "carbs_g": 0.7, "protein_g": 12.6, "fat_g": 9.5 },
+      "grid": { "kind": "pack", "pack_g": 58, "unit": "egg", "fraction": 1.0, "max_packs": 3 },
+      "meals": ["breakfast", "lunch", "dinner"]
+    },
+    {
+      "id": "skyr-plain",
+      "name": "Skyr, plain",
+      "category": "dairy",
+      "per_100g": { "kcal": 63, "carbs_g": 4.0, "protein_g": 11.0, "fat_g": 0.2 },
+      "grid": { "kind": "mass", "step_g": 25, "min_g": 100, "max_g": 300 },
+      "meals": ["breakfast", "snack", "dinner"]
+    },
+    {
+      "id": "olive-oil",
+      "name": "Olive oil",
+      "category": "fats",
+      "per_100g": { "kcal": 884, "carbs_g": 0.0, "protein_g": 0.0, "fat_g": 100.0 },
+      "grid": { "kind": "mass", "step_g": 5, "min_g": 5, "max_g": 20 },
+      "meals": ["lunch", "dinner"]
+    }
+  ]
+}

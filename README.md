@@ -112,7 +112,7 @@ These settings are the weights of the score function, translated into plain lang
 
 | Phase | Content | Goal |
 |---|---|---|
-| **0** | Solver as a prototype (plain script, real pantry data) | Prove the suggestions genuinely beat doing it by hand |
+| **0** | [Solver prototype](solver/) — plain script, real pantry data | **Done.** The portion grid costs almost nothing in accuracy |
 | **1** | iOS app, local only, manual entry, own pantry, solver | Usable daily by myself |
 | **2** | Product database + barcode scan, Health integration | Usable by strangers |
 | **3** | Accounts, community dishes, points | Network effect |
@@ -120,6 +120,20 @@ These settings are the weights of the score function, translated into plain lang
 | **5** | Android | Reach |
 
 Phases 0 and 1 are the only ones strictly needed to find out whether the idea holds up.
+
+### Phase 0 result
+
+The [solver prototype](solver/) answers the question phase 0 was for. Restricted
+to whole tins, whole pieces and sensible gram steps, it hits the calorie target
+within a median of 3 kcal across 300 random evening budgets, leaves nothing
+standing open in the fridge, and runs in about 5 ms with no dependencies and no
+server. The search is exhaustive rather than heuristic, and is pinned to a
+brute-force enumeration by a test.
+
+Two things phase 0 changed: the default plate is three components rather than
+four (same accuracy, seven times faster), and the scoring weights are now known
+to be plausible but uncalibrated — `use_up_bonus` is the first one phase 1
+should tune against real use. Details and caveats in [solver/README.md](solver/README.md).
 
 ## 7. Technical Notes
 

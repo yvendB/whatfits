@@ -1,0 +1,12 @@
+[project]
+name = "whatfits-solver"
+version = "0.1.0"
+description = "Phase 0 prototype: plan the last meal of the day from what is left in the budget and the cupboard."
+requires-python = ">=3.10"
+dependencies = []
+
+# Deliberately empty. The solver is meant to be portable enough to be ported,
+# not to accumulate a dependency tree it cannot escape from.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
