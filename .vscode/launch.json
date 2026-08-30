@@ -1,0 +1,27 @@
+{
+  // Requires the Python extension. Press F5 with this configuration selected to
+  // step through the solver rather than just run it.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug: plan a meal",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "whatfits",
+      "args": ["plan", "950", "--protein", "65", "--meal", "dinner"],
+      "cwd": "${workspaceFolder}/solver",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug: the tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests", "-q"],
+      "cwd": "${workspaceFolder}/solver",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}

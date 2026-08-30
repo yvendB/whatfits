@@ -14,6 +14,26 @@ No dependencies beyond the standard library. Python 3.10+.
 
 ## Running it
 
+### In VS Code, without touching a terminal
+
+Open the **`WhatFits` folder itself** (File → Open Folder), not the folder above
+it — otherwise the tasks below are not found.
+
+Then `Ctrl+Shift+P` → **Tasks: Run Task**:
+
+| Task | What it does |
+|---|---|
+| WhatFits: plan a meal | asks for calories and meal, then suggests |
+| WhatFits: plan a meal (with macros) | same, plus protein / carb / fat targets |
+| WhatFits: check the pantry | plausibility check over your data |
+| WhatFits: benchmark the portion grid | what the grid costs in accuracy |
+| WhatFits: run the tests | the full suite |
+
+Planning is the default build task, so `Ctrl+Shift+B` runs it straight away.
+With the Python extension installed, `F5` steps through it in the debugger.
+
+### In a terminal
+
 ```bash
 cd solver
 
@@ -28,6 +48,12 @@ python -m whatfits benchmark --runs 300 --meal dinner
 
 python -m pytest tests
 ```
+
+> **On Windows `cmd`, plain `cd` will not move between drives.** If the prompt
+> sits on `C:` and the repository is on `F:`, `cd F:\...` silently does nothing.
+> Use `cd /d "F:\Users\prime\Claude Workspace\WhatFits\solver"`, or type `F:`
+> on its own line first. PowerShell and the VS Code terminal do not have this
+> problem.
 
 Sample output:
 
