@@ -25,6 +25,8 @@ Then `Ctrl+Shift+P` → **Tasks: Run Task**:
 |---|---|
 | WhatFits: plan a meal | asks for calories and meal, then suggests |
 | WhatFits: plan a meal (with macros) | same, plus protein / carb / fat targets |
+| WhatFits: add a product by barcode | type the GTIN, it looks it up and adds it |
+| WhatFits: search for a product | find one by name or brand |
 | WhatFits: check the pantry | plausibility check over your data |
 | WhatFits: benchmark the portion grid | what the grid costs in accuracy |
 | WhatFits: run the tests | the full suite |

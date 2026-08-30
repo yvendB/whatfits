@@ -56,6 +56,36 @@
       "problemMatcher": []
     },
     {
+      "label": "WhatFits: add a product by barcode",
+      "detail": "Type the GTIN from the packet; looks it up and adds it to the pantry.",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "whatfits", "lookup", "${input:barcode}", "--add"],
+      "options": { "cwd": "${workspaceFolder}/solver" },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "WhatFits: search for a product",
+      "detail": "Find a product by name or brand when there is no barcode to hand.",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "whatfits", "find", "${input:query}"],
+      "options": { "cwd": "${workspaceFolder}/solver" },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "WhatFits: check the pantry",
       "detail": "Run the plausibility check over data/pantry.json.",
       "type": "shell",
@@ -102,6 +132,16 @@
     }
   ],
   "inputs": [
+    {
+      "id": "barcode",
+      "type": "promptString",
+      "description": "Barcode from the packet (the digits under the bars)"
+    },
+    {
+      "id": "query",
+      "type": "promptString",
+      "description": "Product name or brand, e.g. Rinderhack Purland"
+    },
     {
       "id": "kcal",
       "type": "promptString",
