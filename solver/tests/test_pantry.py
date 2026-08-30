@@ -98,3 +98,44 @@ def test_implausible_entry_loads_but_is_reported(tmp_path):
     pantry = load_pantry(_write(tmp_path, payload))
     assert len(pantry) == 1
     assert "nonsense" in check_pantry(pantry)
+
+
+# --------------------------------------------------------------------------
+# Barcodes
+# --------------------------------------------------------------------------
+
+
+def test_barcode_is_normalised_on_load(tmp_path):
+    entry = {
+        "id": "x",
+        "name": "X",
+        "barcode": " 3017-6204-22003 ",
+        "per_100g": {"kcal": 100, "carbs_g": 1, "protein_g": 1, "fat_g": 1},
+        "grid": {"kind": "mass", "step_g": 10, "min_g": 10, "max_g": 50},
+        "meals": ["dinner"],
+    }
+    pantry = load_pantry(_write(tmp_path, {"products": [entry]}))
+    assert pantry[0].barcode == "3017620422003"
+
+
+def test_a_mistyped_barcode_is_reported_by_the_check(tmp_path):
+    """A wrong barcode does not fail loudly -- it points at a different food."""
+    entry = {
+        "id": "x",
+        "name": "X",
+        "barcode": "3017620422004",
+        "per_100g": {"kcal": 100, "carbs_g": 1, "protein_g": 1, "fat_g": 1},
+        "grid": {"kind": "mass", "step_g": 10, "min_g": 10, "max_g": 50},
+        "meals": ["dinner"],
+    }
+    pantry = load_pantry(_write(tmp_path, {"products": [entry]}))
+    problems = check_pantry(pantry)
+    assert "x" in problems
+    assert any("barcode" in issue and "check digit" in issue for issue in problems["x"])
+
+
+def test_products_without_a_barcode_are_fine(pantry_file):
+    """The seed pantry carries none, and must still pass."""
+    pantry = load_pantry(pantry_file)
+    assert all(p.barcode is None for p in pantry)
+    assert check_pantry(pantry) == {}
