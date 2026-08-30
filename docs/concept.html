@@ -634,6 +634,9 @@ score = w_kcal  · deviation(kcal)        <span class="c">// asymmetric: over �
       <div class="sec-head"><span class="sec-num">05</span><h2>Product data</h2></div>
       <p>Users need to be able to add their own products &mdash; otherwise the one store brand they actually buy is always missing. Two stages keep the database from rotting.</p>
 
+      <h3>Three ways in</h3>
+      <p>In ascending order of how much work they cost: <strong>scan the barcode</strong>, <strong>search by name or brand</strong> &mdash; &ldquo;Rinderhack Purland&rdquo; has to find the Kaufland own brand &mdash; or <strong>type it in</strong>. The barcode is not merely convenient: it is the primary key of Open Food Facts, so scanning and the cold-start fix are the same mechanism rather than two features. Barcodes carry a mod-10 check digit, so a mistyped one is caught with no network call at all &mdash; worth doing, because a wrong barcode does not fail, it silently points at a different food.</p>
+
       <h3>Automatic plausibility check</h3>
       <ul>
         <li><strong>Calculated calories:</strong> <code>kcal ≈ 4·carbs + 4·protein + 9·fat</code>. If the entered value deviates by more than roughly 20&nbsp;%, warn.</li>
@@ -643,9 +646,30 @@ score = w_kcal  · deviation(kcal)        <span class="c">// asymmetric: over �
       <p>Anything suspicious, or used especially often, additionally goes into community review.</p>
 
       <div class="note">
-        <span class="note-label">Cold start &mdash; to resolve</span>
-        <p>An empty product database makes the app unusable. The obvious base layer is <a href="https://world.openfoodfacts.org">Open Food Facts</a> &mdash; open, barcode-indexed, millions of products.</p>
-        <p>Its licence (ODbL) does, however, require attribution and imposes conditions on derived databases. That has to be settled <em>before</em> commercial use, not after.</p>
+        <span class="note-label">Cold start &mdash; measured, not assumed</span>
+        <p>An empty product database makes the app unusable, and <a href="https://world.openfoodfacts.org">Open Food Facts</a> is the obvious base layer: open, barcode-indexed, millions of products. Coverage, sampled 100 products per brand:</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Brand</th><th>Nutrition</th><th>Pack size</th><th>Both</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Bonduelle</td><td class="mono">100 %</td><td class="mono">99 %</td><td class="mono">99 %</td></tr>
+            <tr><td>German products overall</td><td class="mono">97 %</td><td class="mono">100 %</td><td class="mono">97 %</td></tr>
+            <tr><td>K-Classic (Kaufland)</td><td class="mono">95 %</td><td class="mono">91 %</td><td class="mono">87 %</td></tr>
+            <tr class="critical"><td>Purland (Kaufland, fresh meat)</td><td class="mono">65 %</td><td class="mono">68 %</td><td class="mono">41 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Good enough to build on &mdash; but fresh-produce own brands are the weak spot, and those are exactly what people put in their baskets. A scan of &ldquo;Rinder-Hackfleisch Purland, 500&nbsp;g&rdquo; returns a real product with not one nutrition value attached. So <strong>&ldquo;scanned, but incomplete&rdquo; is a normal path, not an error state</strong>, and it has to lead straight into filling the gaps by hand &mdash; which feeds the community database and closes the same loop as the community dishes.</p>
+
+      <div class="note">
+        <span class="note-label">What a database cannot give us</span>
+        <p>Open Food Facts knows the net weight. It does not know the drained weight of a tin, how many pieces are in a pack, or whether you would use half of one. That knowledge is the user's, and it is precisely what makes this more than a lookup table.</p>
+        <p>The ODbL licence also requires attribution and imposes conditions on derived databases. That has to be settled <em>before</em> commercial use, not after.</p>
       </div>
     </section>
 
@@ -682,7 +706,7 @@ score = w_kcal  · deviation(kcal)        <span class="c">// asymmetric: over �
           <tbody>
             <tr class="critical"><td class="mono">0</td><td>Solver as a prototype, plain script, real pantry data</td><td>Prove the suggestions beat doing it by hand</td></tr>
             <tr class="critical"><td class="mono">1</td><td>iOS app, local only, manual entry, own pantry, solver</td><td>Usable daily by myself</td></tr>
-            <tr><td class="mono">2</td><td>Product database, barcode scan, Health integration</td><td>Usable by strangers</td></tr>
+            <tr><td class="mono">2</td><td>Product database, barcode scan and search, Health integration</td><td>Usable by strangers</td></tr>
             <tr><td class="mono">3</td><td>Accounts, community dishes, points</td><td>Network effect</td></tr>
             <tr><td class="mono">4</td><td>Ads and Pro subscription</td><td>Monetisation</td></tr>
             <tr><td class="mono">5</td><td>Android</td><td>Reach</td></tr>
@@ -710,7 +734,7 @@ score = w_kcal  · deviation(kcal)        <span class="c">// asymmetric: over �
       <div class="questions">
         <div class="question"><span class="q-mark">01</span><p>Open Food Facts licensing (ODbL) under commercial use.</p></div>
         <div class="question"><span class="q-mark">02</span><p>Does Yazio reliably write to Apple Health? And what about the other major trackers?</p></div>
-        <div class="question"><span class="q-mark">03</span><p>How does the pantry get into the app without typing? Barcode scan as the default path.</p></div>
+        <div class="question"><span class="q-mark">03</span><p>How much of the gap in fresh-produce coverage can community contributions realistically close, and how fast?</p></div>
         <div class="question"><span class="q-mark">04</span><p>Trademark clearance for &ldquo;WhatFits&rdquo; (DPMA, EUIPO, USPTO) &mdash; the obvious collisions are ruled out, but a web search is not a legal clearance.</p></div>
         <div class="question"><span class="q-mark">05</span><p>Community features need moderation. At what point is that worth the effort?</p></div>
       </div>

@@ -65,7 +65,15 @@ In practice: pre-filter by meal and category, then depth-first search with branc
 
 > **Architecture note:** the solver belongs in a standalone, platform-independent module covered by unit tests, independent of the UI framework. It is the app's one genuine differentiator, and the part that is easiest to test — and to show in a portfolio.
 
-### 3.4 Product Database & Data Quality
+### 3.4 Getting Products In, and Keeping Them Clean
+
+Three ways in, in ascending order of how much work they cost the user:
+
+1. **Barcode scan.** The least work possible, and how people already add products in trackers they know. The barcode is not merely a convenience: it is the *primary key* of [Open Food Facts](https://world.openfoodfacts.org), so scanning and the cold-start fix are the same mechanism rather than two features.
+2. **Search by name or brand.** For the packet that is already open, or whose barcode the database does not carry. Typing "Rinderhack Purland" has to find the Kaufland own brand.
+3. **By hand.** The fallback — and needed more often than one would hope (see below). It must never feel like a punishment.
+
+**Barcodes get validated before they are trusted.** Every retail barcode is a GTIN carrying a mod-10 check digit, so a mistyped one is detectable with no network call at all. Worth doing: a wrong barcode does not fail, it silently points at a different food.
 
 Users may add their own products — as in Yazio — because otherwise the one store brand you actually buy is always missing. Two stages keep the database from rotting:
 
@@ -77,7 +85,20 @@ Users may add their own products — as in Yazio — because otherwise the one s
 
 **Community review** for entries that look suspicious or are used frequently.
 
-> **Cold-start problem:** an empty product database makes the app unusable. The obvious base layer is [Open Food Facts](https://world.openfoodfacts.org) — open, barcode-indexed, millions of products. **To check:** its licence (ODbL) requires attribution and imposes conditions on derived databases. That has to be settled *before* commercial use, not after.
+> **Cold start — measured, not assumed.** An empty product database makes the app unusable, and Open Food Facts is the obvious base layer: open, barcode-indexed, millions of products. Coverage, sampled 100 products per brand:
+>
+> | Brand | Nutrition | Pack size | Both |
+> |---|---|---|---|
+> | Bonduelle | 100 % | 99 % | 99 % |
+> | German products overall | 97 % | 100 % | 97 % |
+> | K-Classic (Kaufland) | 95 % | 91 % | 87 % |
+> | **Purland (Kaufland, fresh meat)** | **65 %** | **68 %** | **41 %** |
+>
+> Good enough to build on — but fresh-produce own brands are the weak spot, and those are exactly what people put in their baskets. A scan of "Rinder-Hackfleisch Purland, 500 g" returns a real product with not one nutrition value attached. So **"scanned, but incomplete" is a normal path, not an error state**, and it has to lead straight into filling the gaps by hand. Which feeds the community database, closing the same loop as 3.7.
+
+> **The portion grid can never come from a database.** Open Food Facts knows the net weight. It does not know the drained weight of a tin, how many pieces are in a pack, or whether you would use half of one. That knowledge is the user's, and it is precisely what makes this more than a lookup table.
+
+> **Licence, still open:** ODbL requires attribution and imposes conditions on derived databases. That has to be settled *before* commercial use, not after.
 
 ### 3.5 Meal Context
 
@@ -114,7 +135,7 @@ These settings are the weights of the score function, translated into plain lang
 |---|---|---|
 | **0** | [Solver prototype](solver/) — plain script, real pantry data | **Done.** The portion grid costs almost nothing in accuracy |
 | **1** | iOS app, local only, manual entry, own pantry, solver | Usable daily by myself |
-| **2** | Product database + barcode scan, Health integration | Usable by strangers |
+| **2** | Product database + barcode scan + search, Health integration | Usable by strangers |
 | **3** | Accounts, community dishes, points | Network effect |
 | **4** | Ads + Pro subscription | Monetisation |
 | **5** | Android | Reach |
@@ -150,7 +171,7 @@ WhatFits is **not** a calorie tracker and does not aim to become one. It is a co
 
 - Open Food Facts licensing (ODbL) under commercial use.
 - Does Yazio reliably write to Apple Health? What about the other major trackers?
-- How does the pantry get into the app without typing? (Barcode scan as the default path.)
+- How much of the gap in fresh-produce coverage can community contributions realistically close, and how fast?
 - Trademark clearance for "WhatFits" (DPMA, EUIPO, USPTO) — the obvious collisions are ruled out, but a web search is not a legal clearance.
 - Community features need moderation. At what point is that worth the effort?
 

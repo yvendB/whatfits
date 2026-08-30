@@ -32,6 +32,19 @@ Then `Ctrl+Shift+P` → **Tasks: Run Task**:
 Planning is the default build task, so `Ctrl+Shift+B` runs it straight away.
 With the Python extension installed, `F5` steps through it in the debugger.
 
+### Filling the pantry from a barcode
+
+```bash
+python -m whatfits lookup 4250193181802 --add   # scan replacement: type the GTIN
+python -m whatfits find "Rinderhack Purland"    # when there is no barcode to hand
+```
+
+`lookup` validates the check digit before spending a network call, reports every
+value the database is missing rather than filling gaps with zeros, and refuses to
+add a product it cannot plan with. Coverage is uneven — see
+[Open Food Facts coverage](#open-food-facts-coverage) — so expect to type some
+products in by hand.
+
 ### In a terminal
 
 ```bash
@@ -134,6 +147,22 @@ targets in conventional proportions, tolerance −150/+50 kcal.
 - **Three components is the right default.** Going from 3 to 4 buys 1 kcal of
   median accuracy for 7× the runtime and a busier plate. Two components fails
   to find anything 20 % of the time. This changed the default during phase 0.
+
+### Open Food Facts coverage
+
+Sampled 100 products per brand, counting how many carry all four macros and a
+parseable pack size.
+
+| Brand | Nutrition | Pack size | Both |
+|---|---|---|---|
+| Bonduelle | 100 % | 99 % | 99 % |
+| German products overall | 97 % | 100 % | 97 % |
+| K-Classic (Kaufland) | 95 % | 91 % | 87 % |
+| **Purland (Kaufland, fresh meat)** | **65 %** | **68 %** | **41 %** |
+
+Good enough to build on, and bad enough that "scanned but incomplete" has to be
+a designed-for path rather than an error. Fresh-produce own brands are the weak
+spot — and they are exactly what ends up in a basket.
 
 ### What this does not settle
 
