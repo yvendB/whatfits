@@ -85,16 +85,27 @@ Users may add their own products — as in Yazio — because otherwise the one s
 
 **Community review** for entries that look suspicious or are used frequently.
 
-> **Cold start — measured, not assumed.** An empty product database makes the app unusable, and Open Food Facts is the obvious base layer: open, barcode-indexed, millions of products. Coverage, sampled 100 products per brand:
+> **Cold start — measured.** An empty product database makes the app unusable, and [Open Food Facts](https://world.openfoodfacts.org) is the base layer: open, barcode-indexed, ~2.8 M products across 150+ countries, ODbL. Coverage, counting only what the solver needs — kcal, carbohydrates, protein and fat:
 >
-> | Brand | Nutrition | Pack size | Both |
-> |---|---|---|---|
-> | Bonduelle | 100 % | 99 % | 99 % |
-> | German products overall | 97 % | 100 % | 97 % |
-> | K-Classic (Kaufland) | 95 % | 91 % | 87 % |
-> | **Purland (Kaufland, fresh meat)** | **65 %** | **68 %** | **41 %** |
+> | Slice | Size | Has all four |
+> |---|---|---|
+> | German products, most scanned | 100 | 97 % |
+> | German products, newest entries | 100 | 97 % |
+> | German products, least scanned | 100 | 95 % |
+> | Landjunker (Lidl, fresh meat) | 87 — full census | 77 % |
+> | **Purland (Kaufland, fresh meat)** | **157 — full census** | **53 %** |
 >
-> Good enough to build on — but fresh-produce own brands are the weak spot, and those are exactly what people put in their baskets. A scan of "Rinder-Hackfleisch Purland, 500 g" returns a real product with not one nutrition value attached. So **"scanned, but incomplete" is a normal path, not an error state**, and it has to lead straight into filling the gaps by hand. Which feeds the community database, closing the same loop as 3.7.
+> So the database is in good shape for packaged goods and has a **specific hole in fresh meat and produce**. A scan of "Rinder-Hackfleisch Purland, 500 g" returns a real product with not one nutrition value attached. So **"scanned, but incomplete" has to be a designed-for path rather than an error state** — rare for a tin of sweetcorn, routine for mince — and it has to lead straight into filling the gaps by hand. Which feeds the community database, closing the same loop as 3.7.
+>
+> *Method, because an earlier version of this table was wrong:* first-page samples are not random samples — Open Food Facts orders by popularity by default, which flattered the big brands and misrepresented the small ones. The figures above come from comparing several different sort orders, and from enumerating the two small brands completely. Separately, only 58 % of German products carry Open Food Facts' own `nutrition-facts-completed` flag, but that demands the full table including salt, sugars and saturated fat. We need four numbers, so that stricter measure is not our constraint.
+
+> **Why this database and not another one.** The question is worth asking once, properly:
+>
+> - **USDA FoodData Central** — free, open, ~450 k branded foods. Tested with three European barcodes (Nutella EAN-13, Purland mince, K-Classic sweetcorn): **zero hits for all three.** It is a US database keyed on UPC. Not usable here.
+> - **FatSecret, Nutritionix, Edamam, Spike** — 3 M+ products and good coverage, but commercial APIs. You may query them; you may not hold the data. For a product whose roadmap ends in a paid app, that means a per-request cost, a hard dependency, and a supplier who can change the terms.
+> - **Open Food Facts** — the only one in its class you can actually keep a copy of.
+>
+> It is not a compromise for lack of a better option; it is the only open barcode-to-nutrition database at this scale. The fresh-produce gap gets closed by users, which is the community mechanism the concept already calls for.
 
 > **The portion grid can never come from a database.** Open Food Facts knows the net weight. It does not know the drained weight of a tin, how many pieces are in a pack, or whether you would use half of one. That knowledge is the user's, and it is precisely what makes this more than a lookup table.
 
