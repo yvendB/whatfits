@@ -5,6 +5,7 @@ cupboard, propose meals in amounts a person can serve: whole tins, whole
 pieces, sensible gram steps.
 """
 
+from . import barcode, openfoodfacts
 from .model import (
     Budget,
     MassGrid,
@@ -22,6 +23,8 @@ from .search import SolveResult, solve
 
 __all__ = [
     "Budget",
+    "barcode",
+    "openfoodfacts",
     "DEFAULT_WEIGHTS",
     "MassGrid",
     "Meal",

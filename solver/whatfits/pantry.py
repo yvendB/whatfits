@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from typing import Any, Iterable
 
+from .barcode import normalise as normalise_barcode
+from .barcode import problems as barcode_problems
 from .model import (
     Grid,
     MassGrid,
@@ -60,6 +62,9 @@ def _build_product(raw: dict[str, Any]) -> Product:
             meals=frozenset(Meal(m) for m in raw["meals"]),
             category=str(raw.get("category", "other")),
             open_g=float(raw.get("open_g", 0.0)),
+            barcode=(
+                normalise_barcode(raw["barcode"]) if raw.get("barcode") else None
+            ),
         )
     except KeyError as missing:
         raise PantryError(f"product entry is missing {missing}") from missing
@@ -93,6 +98,8 @@ def check_pantry(products: Iterable[Product]) -> dict[str, list[str]]:
     problems = {}
     for product in products:
         found = plausibility_problems(product.per_100g)
+        if product.barcode:
+            found += [f"barcode: {issue}" for issue in barcode_problems(product.barcode)]
         if found:
             problems[product.id] = found
     return problems

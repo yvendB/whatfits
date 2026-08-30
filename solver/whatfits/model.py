@@ -246,6 +246,10 @@ class Product:
     open_g: float = 0.0
     """Amount already open in the fridge. Using it up earns a bonus."""
 
+    barcode: str | None = None
+    """GTIN from the packet. The join key to a product database, and the
+    reason scanning can replace typing. See `barcode.py`."""
+
     def portions(self) -> list[Portion]:
         """Every amount of this product the solver is allowed to propose.
 
