@@ -1,0 +1,137 @@
+{
+  // Run these with Ctrl+Shift+P -> "Tasks: Run Task", or Ctrl+Shift+B for the
+  // default one. Every task sets its own working directory, so nothing has to
+  // be typed into a terminal and the drive letter never comes up.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "WhatFits: plan a meal",
+      "detail": "Ask the solver what fits into the calories you have left.",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "-m",
+        "whatfits",
+        "plan",
+        "${input:kcal}",
+        "--meal",
+        "${input:meal}"
+      ],
+      "options": { "cwd": "${workspaceFolder}/solver" },
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "WhatFits: plan a meal (with macros)",
+      "detail": "Same, but also aim at protein, carbohydrate and fat targets.",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "-m",
+        "whatfits",
+        "plan",
+        "${input:kcal}",
+        "--protein",
+        "${input:protein}",
+        "--carbs",
+        "${input:carbs}",
+        "--fat",
+        "${input:fat}",
+        "--meal",
+        "${input:meal}"
+      ],
+      "options": { "cwd": "${workspaceFolder}/solver" },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "WhatFits: check the pantry",
+      "detail": "Run the plausibility check over data/pantry.json.",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "whatfits", "check"],
+      "options": { "cwd": "${workspaceFolder}/solver" },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "WhatFits: benchmark the portion grid",
+      "detail": "Measure what insisting on whole packs costs in accuracy.",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "whatfits", "benchmark", "--runs", "300", "--meal", "dinner"],
+      "options": { "cwd": "${workspaceFolder}/solver" },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "WhatFits: run the tests",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "pytest", "tests", "-q"],
+      "options": { "cwd": "${workspaceFolder}/solver" },
+      "group": { "kind": "test", "isDefault": true },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "kcal",
+      "type": "promptString",
+      "description": "Calories left for today",
+      "default": "950"
+    },
+    {
+      "id": "protein",
+      "type": "promptString",
+      "description": "Protein still to eat (g)",
+      "default": "65"
+    },
+    {
+      "id": "carbs",
+      "type": "promptString",
+      "description": "Carbohydrates still to eat (g)",
+      "default": "130"
+    },
+    {
+      "id": "fat",
+      "type": "promptString",
+      "description": "Fat still to eat (g)",
+      "default": "25"
+    },
+    {
+      "id": "meal",
+      "type": "pickString",
+      "description": "Which meal?",
+      "options": ["dinner", "lunch", "breakfast", "snack"],
+      "default": "dinner"
+    }
+  ]
+}
