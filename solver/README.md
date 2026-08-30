@@ -152,19 +152,37 @@ targets in conventional proportions, tolerance −150/+50 kcal.
 
 ### Open Food Facts coverage
 
-Sampled 100 products per brand, counting how many carry all four macros and a
-parseable pack size.
+Counting only what the solver needs: kcal, carbohydrates, protein and fat.
 
-| Brand | Nutrition | Pack size | Both |
-|---|---|---|---|
-| Bonduelle | 100 % | 99 % | 99 % |
-| German products overall | 97 % | 100 % | 97 % |
-| K-Classic (Kaufland) | 95 % | 91 % | 87 % |
-| **Purland (Kaufland, fresh meat)** | **65 %** | **68 %** | **41 %** |
+| Slice | Size | Has all four |
+|---|---|---|
+| German products, most scanned | 100 | 97 % |
+| German products, newest entries | 100 | 97 % |
+| German products, least scanned | 100 | 95 % |
+| Landjunker (Lidl, fresh meat) | 87 — full census | 77 % |
+| **Purland (Kaufland, fresh meat)** | **157 — full census** | **53 %** |
 
-Good enough to build on, and bad enough that "scanned but incomplete" has to be
-a designed-for path rather than an error. Fresh-produce own brands are the weak
-spot — and they are exactly what ends up in a basket.
+Good for packaged goods, with a specific hole in fresh meat and produce. So
+"scanned but incomplete" is a designed-for path rather than an error — rare for
+a tin of sweetcorn, routine for mince.
+
+> **An earlier version of this table was wrong**, and the mistake is worth
+> keeping visible: first-page results are not a random sample. Open Food Facts
+> sorts by popularity by default, which flattered the big brands and
+> misrepresented the small ones. These figures come from comparing several sort
+> orders and from enumerating the small brands completely.
+>
+> Open Food Facts' own `nutrition-facts-completed` flag sits at 58 % for German
+> products, but it demands the full table including salt, sugars and saturated
+> fat. Four numbers is a much lower bar, so that stricter measure is not the
+> constraint here.
+
+**Why not a different database.** USDA FoodData Central is free and open but US
+only — tested with three European barcodes, it returned zero hits for all three.
+FatSecret, Nutritionix and Edamam have the coverage but are commercial APIs you
+may query and not hold, which for a paid app means a per-request cost and a
+supplier who can change the terms. Open Food Facts is the only open
+barcode-to-nutrition database at this scale.
 
 ### What this does not settle
 

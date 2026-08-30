@@ -7,12 +7,12 @@ user can possibly do, and it is the same key the database is built around.
 Two things this module is careful about, both learned by measuring rather than
 assuming:
 
-  * **Coverage is uneven.** Across 100-product samples, Bonduelle is at 100 %
-    complete nutrition and German products overall at 97 %, but Kaufland's
-    fresh-meat brand Purland sits at 65 %, and only 41 % of its entries have
-    nutrition *and* a pack size. A lookup that quietly returns half a product
-    is worse than one that says what is missing, so `Match.missing` names every
-    gap and nothing is invented to paper over it.
+  * **Coverage is uneven, in a specific place.** German products carry all four
+    macros about 95-97 % of the time, whichever way the results are sorted. But
+    fresh meat is a hole: a full census of Kaufland's Purland brand puts it at
+    53 %, and Lidl's Landjunker at 77 %. A lookup that quietly returns half a
+    product is worse than one that says what is missing, so `Match.missing`
+    names every gap and nothing is invented to paper over it.
 
   * **The portion grid can never come from here.** Open Food Facts knows the net
     weight; it does not know the drained weight of a tin, how many pieces are in

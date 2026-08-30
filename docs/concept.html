@@ -646,25 +646,37 @@ score = w_kcal  Â· deviation(kcal)        <span class="c">// asymmetric: over â‰
       <p>Anything suspicious, or used especially often, additionally goes into community review.</p>
 
       <div class="note">
-        <span class="note-label">Cold start &mdash; measured, not assumed</span>
-        <p>An empty product database makes the app unusable, and <a href="https://world.openfoodfacts.org">Open Food Facts</a> is the obvious base layer: open, barcode-indexed, millions of products. Coverage, sampled 100 products per brand:</p>
+        <span class="note-label">Cold start &mdash; measured</span>
+        <p>An empty product database makes the app unusable, and <a href="https://world.openfoodfacts.org">Open Food Facts</a> is the base layer: open, barcode-indexed, ~2.8 million products across 150+ countries. Coverage below counts only what the solver needs &mdash; kcal, carbohydrates, protein and fat.</p>
       </div>
 
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Brand</th><th>Nutrition</th><th>Pack size</th><th>Both</th></tr>
+            <tr><th>Slice</th><th>Size</th><th>Has all four</th></tr>
           </thead>
           <tbody>
-            <tr><td>Bonduelle</td><td class="mono">100 %</td><td class="mono">99 %</td><td class="mono">99 %</td></tr>
-            <tr><td>German products overall</td><td class="mono">97 %</td><td class="mono">100 %</td><td class="mono">97 %</td></tr>
-            <tr><td>K-Classic (Kaufland)</td><td class="mono">95 %</td><td class="mono">91 %</td><td class="mono">87 %</td></tr>
-            <tr class="critical"><td>Purland (Kaufland, fresh meat)</td><td class="mono">65 %</td><td class="mono">68 %</td><td class="mono">41 %</td></tr>
+            <tr><td>German products, most scanned</td><td class="mono">100</td><td class="mono">97 %</td></tr>
+            <tr><td>German products, newest entries</td><td class="mono">100</td><td class="mono">97 %</td></tr>
+            <tr><td>German products, least scanned</td><td class="mono">100</td><td class="mono">95 %</td></tr>
+            <tr><td>Landjunker (Lidl, fresh meat)</td><td class="mono">87 &middot; census</td><td class="mono">77 %</td></tr>
+            <tr class="critical"><td>Purland (Kaufland, fresh meat)</td><td class="mono">157 &middot; census</td><td class="mono">53 %</td></tr>
           </tbody>
         </table>
       </div>
 
-      <p>Good enough to build on &mdash; but fresh-produce own brands are the weak spot, and those are exactly what people put in their baskets. A scan of &ldquo;Rinder-Hackfleisch Purland, 500&nbsp;g&rdquo; returns a real product with not one nutrition value attached. So <strong>&ldquo;scanned, but incomplete&rdquo; is a normal path, not an error state</strong>, and it has to lead straight into filling the gaps by hand &mdash; which feeds the community database and closes the same loop as the community dishes.</p>
+      <p>The database is in good shape for packaged goods and has a <strong>specific hole in fresh meat and produce</strong>. A scan of &ldquo;Rinder-Hackfleisch Purland, 500&nbsp;g&rdquo; returns a real product with not one nutrition value attached. So <strong>&ldquo;scanned, but incomplete&rdquo; has to be a designed-for path rather than an error state</strong> &mdash; rare for a tin of sweetcorn, routine for mince &mdash; leading straight into filling the gaps by hand, which feeds the community database and closes the same loop as the community dishes.</p>
+
+      <div class="note">
+        <span class="note-label">Method, because an earlier version of this was wrong</span>
+        <p>First-page samples are not random samples. Open Food Facts orders by popularity by default, which flattered the big brands and misrepresented the small ones. These figures come from comparing several different sort orders, and from enumerating the two small brands completely.</p>
+        <p>Separately, only 58&nbsp;% of German products carry Open Food Facts' own <code>nutrition-facts-completed</code> flag &mdash; but that demands the full table including salt, sugars and saturated fat. We need four numbers, so that stricter measure is not our constraint.</p>
+      </div>
+
+      <h3>Why this database and not another</h3>
+      <p><strong>USDA FoodData Central</strong> is free and open with ~450,000 branded foods, but it is a US database keyed on UPC. Tested with three European barcodes &mdash; Nutella, Purland mince, K-Classic sweetcorn &mdash; it returned <strong>zero hits for all three</strong>.</p>
+      <p><strong>FatSecret, Nutritionix, Edamam and Spike</strong> carry 3&nbsp;million products or more with good coverage, but they are commercial APIs: you may query them, you may not hold the data. For a product whose roadmap ends in a paid app, that means a per-request cost, a hard dependency, and a supplier who can change the terms.</p>
+      <p>Open Food Facts is the only one in its class you can keep a copy of. It is not a compromise for lack of something better &mdash; it is the only open barcode-to-nutrition database at this scale, and the fresh-produce gap is closed by users, which is the community mechanism the concept already calls for.</p>
 
       <div class="note">
         <span class="note-label">What a database cannot give us</span>
