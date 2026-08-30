@@ -8,12 +8,16 @@
 from __future__ import annotations
 
 import argparse
+import json
 import random
 import statistics
 from pathlib import Path
 from typing import Sequence
 
-from .model import Budget, Meal, Product, Suggestion
+from . import openfoodfacts
+from .barcode import normalise as normalise_barcode
+from .barcode import problems as barcode_problems
+from .model import Budget, Meal, Product, Suggestion, plausibility_problems
 from .pantry import PantryError, check_pantry, load_pantry
 from .search import solve
 
@@ -225,6 +229,178 @@ def cmd_benchmark(args: argparse.Namespace) -> int:
     return 0
 
 
+
+# --------------------------------------------------------------------------
+# Product database
+# --------------------------------------------------------------------------
+
+
+def _slug(text: str) -> str:
+    kept = [c.lower() if c.isalnum() else "-" for c in text]
+    return "-".join(part for part in "".join(kept).split("-") if part)[:48] or "product"
+
+
+def _entry_from_match(match, meals: list[str]) -> dict:
+    """Turn a database hit into a pantry entry.
+
+    The grid is the one thing the database cannot supply, so it is filled with
+    the safest possible assumption -- whole packs -- and the caller is told
+    plainly that this is the part to correct.
+    """
+    nutrition = match.nutrition
+    if match.pack_g:
+        grid = {
+            "kind": "pack",
+            "pack_g": round(match.pack_g, 1),
+            "unit": "pack",
+            "fraction": 1.0,
+            "max_packs": 2,
+        }
+    else:
+        grid = {"kind": "mass", "step_g": 10, "min_g": 20, "max_g": 200}
+
+    return {
+        "id": _slug(f"{match.name}-{match.brands}" if match.brands else match.name),
+        "name": match.label,
+        "barcode": match.barcode,
+        "category": "other",
+        "per_100g": {
+            "kcal": nutrition.kcal,
+            "carbs_g": nutrition.carbs_g,
+            "protein_g": nutrition.protein_g,
+            "fat_g": nutrition.fat_g,
+        },
+        "grid": grid,
+        "meals": meals,
+    }
+
+
+def _append_to_pantry(path: Path, entry: dict) -> tuple[bool, str]:
+    """Append an entry. Returns whether it was added, and what to tell the user."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    products = data.setdefault("products", [])
+
+    for existing in products:
+        if existing.get("barcode") and existing["barcode"] == entry["barcode"]:
+            return False, f"already in the pantry as '{existing['id']}' -- nothing added"
+
+    taken = {p.get("id") for p in products}
+    base = entry["id"]
+    suffix = 2
+    while entry["id"] in taken:
+        entry["id"] = f"{base}-{suffix}"
+        suffix += 1
+
+    products.append(entry)
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return True, f"added to {path} as '{entry['id']}'"
+
+
+def _report_match(match) -> None:
+    print(f"  {match.label}")
+    print(f"  barcode {match.barcode}")
+    if match.nutrition:
+        n = match.nutrition
+        print(
+            f"  per 100 g   {n.kcal:.0f} kcal   {n.carbs_g:.1f} g carbs"
+            f"   {n.protein_g:.1f} g protein   {n.fat_g:.1f} g fat"
+        )
+        issues = plausibility_problems(n)
+        for issue in issues:
+            print(f"  ! {issue}")
+    if match.pack_g:
+        print(f"  pack        {match.pack_g:.0f} g  (from {match.quantity_raw!r})")
+    if match.missing:
+        print(f"  MISSING     {', '.join(match.missing)}")
+
+
+def cmd_lookup(args: argparse.Namespace) -> int:
+    code = normalise_barcode(args.barcode)
+    issues = barcode_problems(code)
+    if issues:
+        print()
+        for issue in issues:
+            print(f"  {issue}")
+        print()
+        return 2
+
+    print()
+    try:
+        match = openfoodfacts.lookup(code)
+    except openfoodfacts.LookupFailed as error:
+        print(f"  {error}")
+        print()
+        return 1
+
+    if match is None:
+        print(f"  Open Food Facts does not have {code}.")
+        print()
+        print("  That is common for fresh produce and supermarket own brands.")
+        print("  Add the product by hand in the pantry file, using the values")
+        print("  printed on the packet.")
+        print()
+        return 1
+
+    _report_match(match)
+    print()
+
+    if not match.nutrition:
+        print("  Not enough to plan with: the nutrition values are absent.")
+        print("  Copy them off the packet and add the product by hand.")
+        print()
+        return 1
+
+    if args.add:
+        added, message = _append_to_pantry(
+            args.pantry, _entry_from_match(match, args.meals.split(","))
+        )
+        print(f"  {message}")
+        if added:
+            print()
+            print("  Check the portion grid before trusting a suggestion. The database")
+            print("  knows the net weight; it does not know the drained weight of a tin,")
+            print("  how many pieces are in the pack, or whether half of one is acceptable.")
+    else:
+        print("  Pass --add to put this in the pantry.")
+    print()
+    return 0
+
+
+def cmd_find(args: argparse.Namespace) -> int:
+    print()
+    try:
+        matches = openfoodfacts.search(args.query, limit=args.limit)
+    except openfoodfacts.LookupFailed as error:
+        print(f"  {error}")
+        print()
+        return 1
+
+    if not matches:
+        print(f"  Nothing found for {args.query!r}.")
+        print()
+        return 1
+
+    print(f"  {len(matches)} result(s) for {args.query!r}")
+    print()
+    for match in matches:
+        flag = "  " if match.complete else "! "
+        kcal = f"{match.nutrition.kcal:>4.0f} kcal" if match.nutrition else " incomplete"
+        pack = f"{match.pack_g:>6.0f} g" if match.pack_g else "     ? g"
+        print(f"  {flag}{match.barcode:<15} {kcal}  {pack}   {match.label[:52]}")
+
+        notes = list(match.missing)
+        if barcode_problems(match.barcode):
+            notes.append("barcode is not a valid GTIN, so lookup will refuse it")
+        if notes:
+            print(f"      {' ' * 15} {', '.join(notes)}")
+
+    print()
+    print("  Lines marked ! are incomplete. Look one up with:")
+    print("      python -m whatfits lookup <barcode> --add")
+    print()
+    return 0
+
+
 # --------------------------------------------------------------------------
 # Argument parsing
 # --------------------------------------------------------------------------
@@ -260,6 +436,20 @@ def build_parser() -> argparse.ArgumentParser:
     check = sub.add_parser("check", help="run the plausibility check over the pantry")
     check.add_argument("--pantry", type=Path, default=DEFAULT_PANTRY, help="pantry JSON file")
     check.set_defaults(func=cmd_check)
+
+    look = sub.add_parser("lookup", help="look a barcode up in Open Food Facts")
+    look.add_argument("barcode", help="the GTIN printed on the packet")
+    look.add_argument("--add", action="store_true", help="append it to the pantry file")
+    look.add_argument(
+        "--meals", default="lunch,dinner", help="comma-separated meals it suits"
+    )
+    look.add_argument("--pantry", type=Path, default=DEFAULT_PANTRY, help="pantry JSON file")
+    look.set_defaults(func=cmd_lookup)
+
+    find = sub.add_parser("find", help="search Open Food Facts by name or brand")
+    find.add_argument("query", help='for example "Rinderhack Purland"')
+    find.add_argument("--limit", type=int, default=8, help="how many results")
+    find.set_defaults(func=cmd_find)
 
     bench = sub.add_parser("benchmark", help="measure the cost of the portion grid")
     bench.add_argument("--runs", type=int, default=200, help="how many random budgets")
